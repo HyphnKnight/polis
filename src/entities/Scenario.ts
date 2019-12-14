@@ -1,7 +1,7 @@
 import { remove } from "../pura/array";
 import { generateGrid, Hex } from "../pura/hex";
 import { clamp } from "../pura/math";
-import { commodities, Commodity, CommodityId } from "./Commodity";
+import { commodities, CommodityId, AnyCommodity } from "./Commodity";
 import { Route } from "./Route,";
 import { Tile } from "./Tile";
 
@@ -65,7 +65,7 @@ export class Scenario {
     }
   }
 
-  private deliverMilitary(commodity: Commodity) {
+  private deliverMilitary(commodity: AnyCommodity) {
     const count = this.militaryDeliveries.reduce(
       (count, id) => id === commodity.id ? count + 1 : count, 0);
     const percentage = count / this.militaryDeliveries.length;
@@ -80,7 +80,7 @@ export class Scenario {
     }
   }
 
-  private deliverPopulation(commodity: Commodity) {
+  private deliverPopulation(commodity: AnyCommodity) {
     const count = this.populationDeliveries.reduce(
       (count, id) => id === commodity.id ? count + 1 : count, 0);
     const percentage = count / this.populationDeliveries.length;
