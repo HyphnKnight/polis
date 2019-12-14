@@ -1,0 +1,26 @@
+export declare const isNull: (unknown: any) => unknown is null;
+export declare const isUndefined: (unknown: any) => unknown is undefined;
+export declare const isNullOrUndefined: (unknown: any) => unknown is null | undefined;
+export declare const isString: (unknown: any) => unknown is string;
+export declare const isNumber: (unknown: any) => unknown is number;
+export declare const isBoolean: (unknown: any) => unknown is boolean;
+export declare const isDate: (unknown: any) => unknown is Date;
+export declare const isFunction: (unknown: any) => unknown is Function;
+export declare const isArray: (unknown: any) => unknown is any[];
+export declare const isArrayOf: <type>(func: (u: any) => boolean) => (u: any) => u is type[];
+export declare const isArrayOfNumbers: (u: any) => u is number[];
+export declare const isArrayOfStrings: (u: any) => u is string[];
+export declare const isArrayOfDates: (u: any) => u is Date[];
+export declare const isArrayOfFunctions: (u: any) => u is Function[];
+export declare const isMap: (unknown: any) => unknown is Map<any, any>;
+export declare const isMapOfTo: <key, value>(keyFunc: (u: any) => boolean, valueFunc: (u: any) => boolean) => (u: any) => u is Map<key, value>;
+export declare const isSet: (unknown: any) => unknown is Set<any>;
+export declare const isSetOf: <type>(func: (u: any) => boolean) => (u: any) => u is Set<type>;
+export declare const isObjectLiteral: (unknown: any) => unknown is {
+    [propertyName: string]: any;
+};
+export declare const isNode: (unknown: any) => unknown is Node;
+export declare const isElement: (unknown: any) => unknown is HTMLElement;
+export declare const isComparable: (unknown: any) => unknown is string | number | boolean | symbol | Function;
+export declare const isFalsey: (unknown: any) => unknown is false | "" | null | undefined;
+export declare function isEqual(valueA: any, valueB: any): boolean;

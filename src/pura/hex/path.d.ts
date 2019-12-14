@@ -1,0 +1,1 @@
+export declare const hexPathTo: (resist: (current: [number, number, number], neighbor: [number, number, number]) => number, heuristic: (goal: [number, number, number], neighbor: [number, number, number]) => number, maxResist?: number) => (start: [number, number, number], goal: [number, number, number]) => [number, number, number][] | null;
