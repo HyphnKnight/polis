@@ -2,11 +2,22 @@ import { remove } from "../pura/array";
 import { generateGrid, Hex } from "../pura/hex";
 import { clamp } from "../pura/math";
 import { commodities, CommodityId, AnyCommodity } from "./Commodity";
-import { Route } from "./Route,";
+import { Route } from "./Route";
 import { Tile } from "./Tile";
+import { isFunction } from "../pura/is/type";
 
 
 const SECONDS_TO_VALUE_LOSS = 5;
+
+interface ScenarioData {
+  radius: number;
+  tiles: Map<Hex, Tile>;
+  routes: Route[];
+}
+
+interface ScenarioGenerator {
+  (radius: number): Map<Hex, Tile>;
+}
 
 export class Scenario {
   population: number;
@@ -22,17 +33,20 @@ export class Scenario {
     private radius: number,
     population: number = 1,
     military: number = 1,
-    terrainGenerator: (hex: Hex, grid: Hex[][], tiles: Map<Hex, Tile>) => Tile,
+    scenarioDataOrGenerator: ScenarioData | ScenarioGenerator,
     private lockPopulation: boolean = false,
     private lockMilitary: boolean = false,
   ) {
     this.grid = generateGrid(this.radius);
     this.population = population;
     this.military = military;
-    this.grid.flat().forEach(hex => {
-      this.tiles.set(hex, terrainGenerator(hex, this.grid, this.tiles));
-    });
-
+    if (isFunction(scenarioDataOrGenerator)) {
+      this.tiles = scenarioDataOrGenerator(this.radius);
+    } else {
+      this.radius = scenarioDataOrGenerator.radius;
+      this.tiles = scenarioDataOrGenerator.tiles;
+      this.routes = scenarioDataOrGenerator.routes;
+    }
   }
 
   update(delta: number) {
