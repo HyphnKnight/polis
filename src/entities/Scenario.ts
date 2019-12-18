@@ -58,8 +58,9 @@ export class Scenario {
     if (this.military < 1) this.military = 1;
   }
 
-  addRoute(start: Tile, end: Tile, commodity: CommodityId): void {
-    const route = new Route(start, end, commodity, this);
+  addRoute(start: Tile, end: Tile, commodityId: CommodityId): void {
+    if (Route.isValidRoute(start, end, commodityId)) return;
+    const route = new Route(start, end, commodityId, this);
     this.routes.push(route);
   }
 
