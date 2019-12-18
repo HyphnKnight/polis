@@ -2,6 +2,7 @@ import { CommodityId, CommodityStorage, commodities, ProductionDetail, getCompon
 import { Tile } from "./Tile";
 import { find } from "../pura/array";
 
+
 export const enum DistrictDataId {
   TownCenter,
   LumberCamp,
@@ -102,29 +103,31 @@ export const districtData: { readonly [Id in DistrictDataId]: DistrictData } = {
     produces: [
     ],
   },
-
 };
 
+
 export class District {
-  readonly districtData: DistrictData;
   readonly acceptableInputs: CommodityId[] = [];
 
   private produtionCycle = 0;
 
   private readonly productionLines: Map<CommodityId, ProductionDetail[]>;
 
+  get data() {
+    return districtData[this.id];
+  }
+
   get productionCycleLength(): number {
-    return this.districtData.productionCycleLength || 1000;
+    return this.data.productionCycleLength || 1000;
   }
 
   constructor(
-    readonly kind: DistrictDataId,
+    readonly id: DistrictDataId,
     readonly storage: CommodityStorage,
     readonly tile: Tile,
   ) {
-    this.districtData = districtData[this.kind];
-    if (this.districtData.produces) {
-      this.districtData.produces.forEach(id => {
+    if (this.data.produces) {
+      this.data.produces.forEach(id => {
         const commodity = commodities[id];
         commodity.sources.forEach(detail => {
           const ids = getComponentIds(detail);
