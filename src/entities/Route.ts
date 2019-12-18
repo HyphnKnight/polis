@@ -65,37 +65,29 @@ export class Route {
     if (tile.district) return true;
   }
 
-  static isValidEndOfRoute(end: Tile, id: CommodityId): boolean {
+  static isValidEndOfRoute(end: Tile, commodityId: CommodityId): boolean {
     if (!end.district) return false
 
     if (end.district.id === DistrictDataId.TownCenter) {
-      const commodity = commodities[id];
+      const commodity = commodities[commodityId];
       return !!commodity.military || !!commodity.population;
     }
 
-    return end.district.acceptableInputs.includes(id);
+    return end.district.acceptableInputs.includes(commodityId);
   }
 
-  static isValidRoute(start: Tile, end: Tile, id: CommodityId): boolean {
+  static isValidRoute(start: Tile, end: Tile, commodityId: CommodityId): boolean {
     if (!start.district) return false
     if (!start.district.data.produces) return false;
-    if (start.district.data.produces.includes(id)) return false;
+    if (start.district.data.produces.includes(commodityId)) return false;
 
-    return Route.isValidEndOfRoute(end, id);
+    return Route.isValidEndOfRoute(end, commodityId);
   }
 }
 
-
-export const enum CaravanState {
-  Traveling,
-  WaitingForPickup,
-  WaitingToDeliver,
-}
 
 export class Caravan {
   progress = 0;
-
-  state: CaravanState = CaravanState.WaitingForPickup;
 
   get start() {
     return this.route.start;
