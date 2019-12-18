@@ -1,4 +1,4 @@
-import { TerrainId } from "./Terrain";
+import { TerrainId, terrainTypes } from "./Terrain";
 import { District } from "./District";
 import { Hex } from "../pura/hex";
 import { Scenario } from "./Scenario";
@@ -6,8 +6,13 @@ import { Scenario } from "./Scenario";
 
 export class Tile {
   district?: District;
+
+  get terrain() {
+    return terrainTypes[this.terrainId];
+  }
+
   constructor(
-    readonly terrain: TerrainId,
+    readonly terrainId: TerrainId,
     readonly hex: Hex,
     readonly scenario: Scenario,
     district?: District,
