@@ -11,42 +11,37 @@
 
 
 export const enum CommodityId {
-  // Harvested goods
-  Timber,
-  RawMeat,
-  Sinew,
-  WildGrain,
-  WheatGrain,
-  CopperOre,
-  TinOre,
-  IronOre,
-  Coal,
-
-  // Process goods 
-  Lumber,
-  WoodenPole,
-  Millet,
-  Flour,
-  CopperIngot,
-  BronzeIngot,
-  IronIngot,
-  SteelIngot,
-  Pig,
-  Cow,
-
-  // Production goods
-  CookedMeat,
-  WoodenSpear,
-  CopperSpear,
-  BronzeSpear,
-  IronSpear,
-  SteelSpear,
-  CopperTool,
-  BronzeTool,
-  IronTool,
-  SteelTool,
-  Bow,
-  Bread,
+  Bow = "Bow",
+  Bread = "Bread",
+  BronzeIngot = "BronzeIngot",
+  BronzeSpear = "BronzeSpear",
+  BronzeTool = "BronzeTool",
+  Coal = "Coal",
+  CookedMeat = "CookedMeat",
+  CopperIngot = "CopperIngot",
+  CopperOre = "CopperOre",
+  CopperSpear = "CopperSpear",
+  CopperTool = "CopperTool",
+  Cow = "Cow",
+  Flour = "Flour",
+  IronIngot = "IronIngot",
+  IronOre = "IronOre",
+  IronSpear = "IronSpear",
+  IronTool = "IronTool",
+  Lumber = "Lumber",
+  Millet = "Millet",
+  Pig = "Pig",
+  RawMeat = "RawMeat",
+  Sinew = "Sinew",
+  SteelIngot = "SteelIngot",
+  SteelSpear = "SteelSpear",
+  SteelTool = "SteelTool",
+  Timber = "Timber",
+  TinOre = "TinOre",
+  WheatGrain = "WheatGrain",
+  WildGrain = "WildGrain",
+  WoodenPole = "WoodenPole",
+  WoodenSpear = "WoodenSpear",
 }
 
 export interface Commodity<Id extends CommodityId> {
@@ -476,5 +471,5 @@ export const commodities: { readonly [Id in CommodityId]: Commodity<Id> } = {
 
 export function getComponentIds(production: ProductionDetail): CommodityId[] {
   if (!production.components) return [];
-  return Object.keys(production.components).map(Number);
+  return Object.keys(production.components) as CommodityId[];
 }
