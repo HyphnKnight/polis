@@ -4,19 +4,19 @@ import { find } from "../pura/array";
 
 
 export const enum DistrictDataId {
-  TownCenter,
-  LumberCamp,
-  HuntingCamp,
-  WheatFarm,
-  Mill,
-  Bakery,
-  Carpenter,
-  CopperMine,
-  TinMine,
-  IronMine,
-  Kiln,
-  Furnace,
-  Blacksmith,
+  TownCenter = "TownCenter",
+  LumberCamp = "LumberCamp",
+  HuntingCamp = "HuntingCamp",
+  WheatFarm = "WheatFarm",
+  Mill = "Mill",
+  Bakery = "Bakery",
+  Carpenter = "Carpenter",
+  CopperMine = "CopperMine",
+  TinMine = "TinMine",
+  IronMine = "IronMine",
+  Kiln = "Kiln",
+  Furnace = "Furnace",
+  Blacksmith = "Blacksmith",
 }
 
 export interface DistrictData {
