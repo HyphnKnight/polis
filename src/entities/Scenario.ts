@@ -5,6 +5,7 @@ import { commodities, CommodityId, AnyCommodity } from "./Commodity";
 import { Route } from "./Route";
 import { Tile } from "./Tile";
 import { isFunction } from "../pura/is/type";
+import { TerrainId } from "./Terrain";
 
 
 const SECONDS_TO_VALUE_LOSS = 5;
@@ -21,13 +22,31 @@ interface ScenarioGenerator {
 
 export class Scenario {
   population: number;
+
+  get populationInt() {
+    return this.population | 0;
+  }
+
+  get populationProgress() {
+    return this.population - this.populationInt;
+  }
+
   military: number;
+
+  get militaryInt() {
+    return this.military | 0;
+  }
+
+  get militaryProgress() {
+    return this.military - this.militaryInt;
+  }
+
   readonly routes: Route[] = [];
   readonly grid: Hex[][];
   readonly tiles = new Map<Hex, Tile>();
 
-  private readonly populationDeliveries: CommodityId[] = [];
-  private readonly militaryDeliveries: CommodityId[] = [];
+  private populationDeliveries: [CommodityId, number][] = [];
+  private militaryDeliveries: [CommodityId, number][] = [];
 
   constructor(
     private radius: number,
@@ -41,7 +60,7 @@ export class Scenario {
     this.population = population;
     this.military = military;
     if (isFunction(scenarioDataOrGenerator)) {
-      this.tiles = scenarioDataOrGenerator(this.radius);
+      this.tiles = this.generate();
     } else {
       this.radius = scenarioDataOrGenerator.radius;
       this.tiles = scenarioDataOrGenerator.tiles;
@@ -56,6 +75,8 @@ export class Scenario {
     if (this.population < 1) this.population = 1;
     this.military -= (delta / SECONDS_TO_VALUE_LOSS);
     if (this.military < 1) this.military = 1;
+    this.populationDeliveries = this.populationDeliveries.filter(([, timeCreated]) => Date.now() - timeCreated < 10000);
+    this.militaryDeliveries = this.militaryDeliveries.filter(([, timeCreated]) => Date.now() - timeCreated < 10000);
   }
 
   addRoute(start: Tile, end: Tile, commodityId: CommodityId): void {
@@ -82,14 +103,14 @@ export class Scenario {
 
   private deliverMilitary(commodity: AnyCommodity) {
     const count = this.militaryDeliveries.reduce(
-      (count, id) => id === commodity.id ? count + 1 : count, 0);
+      (count, [id]) => id === commodity.id ? count + 1 : count, 0);
     const percentage = count / this.militaryDeliveries.length;
     const overUseModifier = 0.5 + (1 - percentage) / 2;
 
     const growthModifier = calculateGrowthModifier(this.militaryDeliveries.length);
 
     this.military += commodity.military! * overUseModifier * growthModifier;
-    this.militaryDeliveries.push(commodity.id);
+    this.militaryDeliveries.push([commodity.id, Date.now()]);
     if (this.militaryDeliveries.length > 100) {
       this.militaryDeliveries.shift();
     }
@@ -97,17 +118,24 @@ export class Scenario {
 
   private deliverPopulation(commodity: AnyCommodity) {
     const count = this.populationDeliveries.reduce(
-      (count, id) => id === commodity.id ? count + 1 : count, 0);
+      (count, [id]) => id === commodity.id ? count + 1 : count, 0);
     const percentage = count / this.populationDeliveries.length;
     const overUseModifier = 0.5 + (1 - percentage) / 2;
 
     const growthModifier = calculateGrowthModifier(this.populationDeliveries.length);
 
     this.population += commodity.population! * overUseModifier * growthModifier;
-    this.populationDeliveries.push(commodity.id);
-    if (this.populationDeliveries.length > 100) {
-      this.populationDeliveries.shift();
-    }
+    this.populationDeliveries.push([commodity.id, Date.now()]);
+  }
+
+  private generate(): Map<Hex, Tile> {
+    const map = new Map<Hex, Tile>();
+    this.grid.forEach(line => {
+      line.forEach(hex => {
+        map.set(hex, new Tile(TerrainId.Plain, hex, this));
+      });
+    });
+    return map;
   }
 }
 
