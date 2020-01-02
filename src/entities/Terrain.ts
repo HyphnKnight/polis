@@ -1,8 +1,8 @@
 import { DistrictDataId } from "./District";
 
 export const enum TerrainId {
-  Plain,
-  Forest,
+  Plain = "Plain",
+  Forest = "Forest",
 }
 
 export interface Terrain {
