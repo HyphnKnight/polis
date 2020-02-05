@@ -1,28 +1,29 @@
-import { TerrainId, terrainTypes } from "./Terrain";
 import { District } from "./District";
-import { Hex } from "../pura/hex";
-import { Scenario } from "./Scenario";
+import { TerrainTypeId } from "./TerrainTypeId";
+import { TerrainType } from "./TerrainType";
+import { terrainTypes } from "./terrainTypes";
 
+
+export interface TileData {
+  readonly terrainType: TerrainTypeId;
+  district: District | null;
+}
 
 export class Tile {
-  district?: District;
+  district: District | null;
 
-  get terrain() {
-    return terrainTypes[this.terrainId];
+  get terrain(): TerrainType {
+    return terrainTypes[this.type];
+  }
+
+  get isEmpty() {
+    return !this.district;
   }
 
   constructor(
-    readonly terrainId: TerrainId,
-    readonly hex: Hex,
-    readonly scenario: Scenario,
-    district?: District,
+    private readonly type: TerrainTypeId,
+    district: District | null = null,
   ) {
     this.district = district;
-  }
-
-  update(delta: number) {
-    if (this.district) {
-      this.district.update(delta);
-    }
   }
 }

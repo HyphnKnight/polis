@@ -1,0 +1,36 @@
+h1 {
+  font-size: 24px;
+}
+
+h2 {
+  font-size: 18px;
+}
+
+.bar{
+  display:flex;
+  flex-direction:row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+section, div {
+  margin: 6px;
+  padding: 6px;
+  border: solid 1px black;
+}
+
+
+button {
+  margin: 6px;
+  padding: 6px;
+  border: solid 1px black;
+  background: white;
+  color: black;
+  cursor:pointer;
+
+}
+
+button:hover {
+  background: black;
+  color: white;
+}
